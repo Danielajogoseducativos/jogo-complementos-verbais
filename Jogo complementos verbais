@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo: Complementos Verbais</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            margin: 50px auto;
+            padding: 20px;
+            max-width: 600px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            color: #333;
+        }
+        .question {
+            margin: 20px 0;
+        }
+        .options button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .options button:hover {
+            background-color: #0056b3;
+        }
+        .feedback {
+            font-size: 18px;
+            margin: 20px 0;
+            color: #333;
+        }
+        .score {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complementos Verbais</h1>
+        <div id="game">
+            <div id="question-container" class="question"></div>
+            <div id="options-container" class="options"></div>
+            <div id="feedback" class="feedback"></div>
+        </div>
+        <div id="score-container" class="feedback" style="display: none;">
+            <h2>Jogo Finalizado!</h2>
+            <p>Sua pontuação final é: <span id="final-score" class="score"></span></p>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Explique como Henriques distingue o objeto direto de uma oração principal em relação ao predicativo do objeto na frase: 'Os alunos consideraram o exame difícil.'",
+                options: [
+                    "a) O exame é o objeto direto e difícil é o predicativo do objeto.",
+                    "b) O exame é o predicativo do objeto e difícil é o objeto direto.",
+                    "c) Os alunos são o predicativo do objeto e o exame é o objeto direto.",
+                    "d) Não há complemento verbal na frase."
+                ],
+                correct: 0
+            },
+            {
+                question: "Analise os complementos verbais na frase: 'O professor emprestou o livro aos alunos.'",
+                options: [
+                    "a) O livro é o objeto indireto e aos alunos é o objeto direto.",
+                    "b) Aos alunos é o objeto direto e o livro é o objeto indireto.",
+                    "c) O livro é o objeto direto e aos alunos é o objeto indireto.",
+                    "d) Não há complementos verbais."
+                ],
+                correct: 2
+            },
+            {
+                question: "Compare a transitividade das construções nas frases: 'O escritor publicou um livro.' e 'O escritor dedicou o livro aos fãs.'",
+                options: [
+                    "a) Ambas são transitivas diretas.",
+                    "b) A primeira é transitiva direta e a segunda é transitiva direta e indireta.",
+                    "c) Ambas são transitivas indiretas.",
+                    "d) Não é possível determinar a transitividade."
+                ],
+                correct: 1
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function loadQuestion() {
+            const questionContainer = document.getElementById("question-container");
+            const optionsContainer = document.getElementById("options-container");
+            const feedback = document.getElementById("feedback");
+
+            feedback.textContent = "";
+            const currentQuestion = questions[currentQuestionIndex];
+
+            questionContainer.textContent = currentQuestion.question;
+
+            optionsContainer.innerHTML = "";
+            currentQuestion.options.forEach((option, index) => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.onclick = () => checkAnswer(index);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedIndex) {
+            const feedback = document.getElementById("feedback");
+            const currentQuestion = questions[currentQuestionIndex];
+
+            if (selectedIndex === currentQuestion.correct) {
+                feedback.textContent = "Resposta correta!";
+                feedback.style.color = "green";
+                score++;
+            } else {
+                feedback.textContent = "Resposta errada!";
+                feedback.style.color = "red";
+            }
+
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                setTimeout(loadQuestion, 1000);
+            } else {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            document.getElementById("game").style.display = "none";
+            document.getElementById("score-container").style.display = "block";
+            document.getElementById("final-score").textContent = score + " de " + questions.length;
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
